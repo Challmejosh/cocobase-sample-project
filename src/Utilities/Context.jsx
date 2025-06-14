@@ -299,6 +299,7 @@ const signUp = async (email, password) => {
         setAuth(true)
         await newUser(email, password);
         setAuth(false)
+        getCart()
     }catch(err){
         console.error(err)
     }
@@ -310,6 +311,7 @@ const signin = async (email, password) =>{
         setAuth(true)
         const res = await user(email, password);
         setAuth(false)
+        getCart()
         return{success: res.user,message:res.message}
         }catch(err){
             console.error(err)
