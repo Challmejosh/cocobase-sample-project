@@ -15,7 +15,7 @@ const Cart = () => {
         }else{
             localCart()
         }
-    },[getCart,getUser,localCart])
+    },[getCart,getUser,localCart,cart])
     const local =Math.round(localTotal).toFixed(2)
     const user =Math.round(total).toFixed(2)
 
