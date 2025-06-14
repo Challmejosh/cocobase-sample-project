@@ -3,7 +3,7 @@ import { AppContext } from "../Utilities/Context";
 import {MdShoppingBasket} from 'react-icons/md'
 
 const Cart = () => {
-    const {cart,handleRemCart,handleDelete,total,getUser,localCart,getCart,gettingCart,addCart} = useContext(AppContext)
+    const {cart,handleRemCart,handleDelete,total,getUser,localCart,localTotal,getCart,gettingCart,addCart} = useContext(AppContext)
     const [data,setData] = useState([])
     // const data = cart?.map(itm => itm?.data)
     useEffect(()=>{
@@ -16,6 +16,9 @@ const Cart = () => {
             localCart()
         }
     },[getCart,getUser,localCart])
+    const local =Math.round(localTotal).toFixed(2)
+    const user =Math.round(total).toFixed(2)
+
     return ( 
         <div className="sm:mx-14 mx-0 flex items-center justify-center flex-col">
             <h1 className="flex w-full items-center justify-center font-semibold text-lg p-3">Cart</h1>
@@ -44,17 +47,14 @@ const Cart = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-end w-full  sm:justify-center ">
+                                        <div className="flex items-center justify-end w-full ">
                                             <div onClick={()=>handleDelete(item)} className="cursor-pointer bg-gradient-to-r from-[#b148ff] to-[#f137a2] p-3 rounded-md w-[90px] flex items-center  sm:justify-center hover:bg-red-400 text-white ">remove</div>
                                         </div>
                                     </div>
                                 </div>
                         ))}
 
-                        <div className="flex items-center justify-between p-3 w-full ">
-                            <p className="flex items-center justify-center text-lg font-semibold">Total</p>
-                            <p className="font-semibold text-lg flex items-center justify-center ">{Math.round(total).toFixed(2)} </p>
-                        </div>
+
                     </div>
                     ):(
                         <div className="">
@@ -98,7 +98,16 @@ const Cart = () => {
                     <MdShoppingBasket size={30} />
                 </div>
             )}
-            {!cart.length<=0 && <button className="bg-gradient-to-r from-[#b148ff] to-[#f137a2] rounded-md cursor-pointer p-3 w-[180px] flex items-center justify-center text-white ">Proceed</button>}
+            {!cart.length<=0 && 
+            (
+                <>
+                    <div className="flex items-center justify-between p-3 w-full ">
+                        <p className="flex items-center justify-center text-lg font-semibold">Total</p>
+                        <p className="font-semibold text-lg flex items-center justify-center ">{getUser? user : local } </p>
+                    </div>
+                    <button className="bg-gradient-to-r from-[#b148ff] to-[#f137a2] rounded-md cursor-pointer p-3 w-[180px] flex items-center justify-center text-white ">Proceed</button>
+                </>
+            )}
         </div>
      );
 }

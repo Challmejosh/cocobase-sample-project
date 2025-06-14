@@ -4,7 +4,7 @@ import {useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {AppContext} from '../Utilities/Context'
 const Search = () => {
-    const {input,setInput,setProduct,data,totalQuantity,getUser,signout} = useContext(AppContext)
+    const {input,setInput,setProduct,data,totalQuantity,localTotalQuantity,getUser,signout} = useContext(AppContext)
     const navigate = useNavigate()
     const inputSearch = (e,input)=>{
         e.preventDefault();
@@ -18,6 +18,7 @@ const Search = () => {
         await signout()
         navigate('/auth')
      }
+     
     return ( 
         <div className="w-full flex items-center mt-2 justify-center gap-x-3">
             <form onSubmit={(e) =>inputSearch(e,input)} className="flex-1 flex items-center justify-center  gap-x-3 ">
@@ -30,7 +31,7 @@ const Search = () => {
                 {getUser && <p onClick={logout} className='cursor-pointer'>sign out</p>}
                 <Link className="p-5 relative  " to="/cart">
                     <FaShoppingCart size={24} className="" />
-                    <p className="absolute top-2 right-3 flex items-center justify-center text-red-500 rounded-full  "> {totalQuantity} </p>
+                    <p className="absolute top-2 right-3 flex items-center justify-center text-red-500 rounded-full  "> {getUser ? totalQuantity : localTotalQuantity} </p>
                 </Link>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, createContext, useState } from "react";
+import { useEffect, createContext, useState, useCallback } from "react";
 import useFetch from "./useFetch";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
@@ -39,23 +39,32 @@ const Context = ({ children }) => {
     // get Cart on mount
 
 
-    const getCart = async ()=>{
-      if(getUser){
-        const allCart = await db.listDocuments("cart");
-        const userOBJ = localStorage.getItem("cocobase-user")
-        const user = JSON.parse(userOBJ)
-        const check = allCart?.filter(itm => itm?.data.user === user.client_id)
-        if(check){
-          setCart(check);
-          setGettingCart(true)
-          return
-        }
-        return
+const getCart = useCallback(async () => {
+  if (getUser) {
+    try {
+      const allCart = await db.listDocuments("cart");
+      const userOBJ = localStorage.getItem("cocobase-user");
+      const user = JSON.parse(userOBJ);
+
+      const check = allCart?.filter(itm => itm?.data.user === user.client_id);
+
+      if (check) {
+        setCart(check);
+        setGettingCart(true);
       }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
     }
+  }
+}, [getUser]);
     
-
-
+    useEffect(()=>{
+      if(getUser){
+        getCart()
+      }else{
+        localCart()
+      }
+    },[getCart,getUser])
 
   const handleCart = async (prod) => {
     try {
@@ -249,22 +258,10 @@ const handleRemCart = async (prodId, change) => {
    }
   };
 
-  const total = ()=>{ 
-    if(getUser){
-      cart?.reduce((acct, item) => acct + item?.data?.price * item?.data?.quantity,0);
-    }
-    else{
-      cart?.reduce((acct, item) => acct + item?.price * item?.quantity,0);
-    }
-}
-  const totalQuantity = ()=>{
-    if(getUser){
-      cart?.reduce((acct, item) => acct + item?.data?.quantity,0);
-    }else{
-      cart?.reduce((acct, item) => acct + item?.quantity,0);
-    }
-  }
-
+  const total = cart?.reduce((acct, item) => acct + item?.data?.price * item?.data?.quantity,0);
+  const localTotal =  cart?.reduce((acct, item) => acct + item?.price * item?.quantity,0);
+  const totalQuantity = cart?.reduce((acct, item) => acct + item?.data?.quantity,0);
+  const localTotalQuantity = cart?.reduce((acct, item) => acct + item?.quantity,0);
   const detailFunc = (prod, all) => {
     try {
       const check = all.find((item) => item.id === prod.id);
@@ -362,6 +359,8 @@ const signout = async () => {
         getCart,
         gettingCart,
         localCart,
+        localTotal,
+        localTotalQuantity
       }}
     >
       {children}
