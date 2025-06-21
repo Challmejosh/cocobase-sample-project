@@ -5,7 +5,6 @@ import {MdShoppingBasket} from 'react-icons/md'
 const Cart = () => {
     const {cart,handleRemCart,handleDelete,total,getUser,localCart,localTotal,getCart,gettingCart,addCart} = useContext(AppContext)
     const [data,setData] = useState([])
-    // const data = cart?.map(itm => itm?.data)
     useEffect(()=>{
         setData(cart)
     },[cart])

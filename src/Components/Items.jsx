@@ -15,8 +15,8 @@ const Item = ({Items}) => {
                 <Category />
             <div className=" gap-5 grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full ">
                 {Items?.map(item => (
-                    <div className="w-full rounded-lg shadow h-[500px] overflow-hidden flex flex-col items-center justify-start pb-3 gap-y-3 " key={item.id}>
-                        <img src={item.image} alt="" className="w-full h-[60%] " />
+                    <div className="w-full rounded-lg shadow h-full xl:h-[500px] overflow-hidden flex flex-col items-center justify-start pb-3 gap-y-3 " key={item.id}>
+                        <img src={item.image} alt="" className="w-full h-[60%] object-contain " />
                             <div className="h-[20%] w-full flex flex-col  px-2 ">
                                 <p className="font-semibold text-md hidden sm:flex w-full "> {item.title}</p>
                                 <div className="p-3 w-full ">
